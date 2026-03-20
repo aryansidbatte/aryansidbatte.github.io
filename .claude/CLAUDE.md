@@ -30,7 +30,6 @@ Computer Science: Computer Game Design B.S., recently graduated. Applying to SWE
 - `humanizer` — run on ALL copy before it goes into any page, no exceptions
 
 ## Connected Tools
-- **GitHub MCP**: connected for repo and PR management
 - **21st.dev**: source of UI components
 
 ## Design Principles
@@ -60,7 +59,8 @@ Computer Science: Computer Game Design B.S., recently graduated. Applying to SWE
 3. Write failing tests before writing implementation code
 4. Run humanizer skill on all copy before it goes into any page
 5. Verify work before declaring any task complete
-6. One feature per branch, PR before merge
+6. Never commit anything -- I handle all commits myself just tell me if i need to
+7. One feature per branch, PR before merge
 
 ## Copy and Voice
 - First person, direct, no fluff
