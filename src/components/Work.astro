@@ -1,0 +1,11 @@
+---
+import { projects } from '../content/projects'
+import WorkInteractive from './WorkInteractive.tsx'
+---
+
+<section id="work" class="py-24 px-6 border-t border-border">
+  <div class="max-w-4xl mx-auto">
+    <p class="font-mono text-[10px] tracking-[2px] text-muted uppercase mb-10">Work</p>
+    <WorkInteractive projects={projects} client:idle />
+  </div>
+</section>
