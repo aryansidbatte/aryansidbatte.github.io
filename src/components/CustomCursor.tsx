@@ -4,6 +4,7 @@ export default function CustomCursor() {
   const dotRef = useRef<HTMLDivElement>(null)
   const [label, setLabel] = useState('')
   const [isHovered, setIsHovered] = useState(false)
+  const [isScaled, setIsScaled] = useState(false)
   const magneticRefs = useRef<{ el: Element; rect: DOMRect }[]>([])
   const reducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
@@ -57,7 +58,7 @@ export default function CustomCursor() {
         if (within) {
           // Override any CSS transition (e.g. from [data-reveal]) so the
           // magnetic pull is instant — not eased over 0.5s with stagger delay
-          htmlEl.style.transition = 'transform 0s'
+          htmlEl.style.transition = 'transform 0.12s ease-out'
           htmlEl.style.transitionDelay = '0ms'
           const dx = Math.max(-12, Math.min(12, (mouseX - cx) * 0.28))
           const dy = Math.max(-12, Math.min(12, (mouseY - cy) * 0.28))
@@ -70,8 +71,10 @@ export default function CustomCursor() {
       })
     }
 
-    // Hover: pill morph via delegation
+    // Hover: pill morph or dot scale via delegation
     function onMouseOver(e: MouseEvent) {
+      const scaleTarget = (e.target as Element).closest('[data-cursor-scale]')
+      if (scaleTarget) { setIsScaled(true); return }
       const target = (e.target as Element).closest('[data-cursor-label]')
       if (target) {
         setLabel((target as HTMLElement).dataset.cursorLabel ?? '')
@@ -80,6 +83,11 @@ export default function CustomCursor() {
     }
 
     function onMouseOut(e: MouseEvent) {
+      const scaleTarget = (e.target as Element).closest('[data-cursor-scale]')
+      if (scaleTarget && !scaleTarget.contains(e.relatedTarget as Node)) {
+        setIsScaled(false)
+        return
+      }
       const target = (e.target as Element).closest('[data-cursor-label]')
       if (target && !target.contains(e.relatedTarget as Node)) {
         setIsHovered(false)
@@ -112,9 +120,9 @@ export default function CustomCursor() {
     }
   }, [])
 
-  const pillWidth = isHovered ? (label ? '68px' : '40px') : '10px'
-  const pillHeight = isHovered ? '26px' : '10px'
-  const pillRadius = isHovered ? '13px' : '50%'
+  const pillWidth = isScaled ? '16px' : isHovered ? (label ? '68px' : '40px') : '10px'
+  const pillHeight = isScaled ? '16px' : isHovered ? '26px' : '10px'
+  const pillRadius = isHovered && !isScaled ? '13px' : '50%'
 
   return (
     <div
