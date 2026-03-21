@@ -4,21 +4,40 @@
 
 <section class="min-h-svh flex flex-col items-center justify-center px-6 relative pt-14">
   <div class="max-w-4xl w-full">
-    <p class="font-mono text-[10px] tracking-[2px] text-muted uppercase mb-4">
+    <!-- Eyebrow: delay 0.5s -->
+    <p
+      class="hero-animate font-mono text-[10px] tracking-[2px] text-muted uppercase mb-4"
+      style="--anim-delay: 0.5s; --anim-duration: 0.65s; --slide-from: 14px;"
+    >
       Software Engineer
     </p>
-    <h1 class="text-4xl md:text-5xl font-bold text-primary tracking-tight leading-[1.1] mb-4">
+
+    <!-- Name: delay 0.72s -->
+    <h1
+      class="hero-animate text-4xl md:text-5xl font-bold text-primary tracking-tight leading-[1.1] mb-4"
+      style="--anim-delay: 0.72s; --anim-duration: 0.75s; --slide-from: 20px;"
+    >
       Aryan Sidbatte
     </h1>
-    <p class="text-sm text-muted mb-8">
+
+    <!-- Subtitle: delay 0.97s -->
+    <p
+      class="hero-animate text-sm text-muted mb-8"
+      style="--anim-delay: 0.97s; --anim-duration: 0.65s; --slide-from: 14px;"
+    >
       CS + Game Design · UC Santa Cruz · San Jose, CA
     </p>
+
+    <!-- CTAs: stagger 1.25 / 1.4 / 1.55s -->
     <div class="flex flex-wrap gap-3">
       <a
         href="https://github.com/aryansidbatte"
         target="_blank"
         rel="noopener noreferrer"
-        class="px-4 py-2 text-sm text-secondary border border-border rounded-md bg-surface hover:opacity-60 transition-opacity"
+        data-cursor-label="Visit"
+        data-magnetic
+        class="hero-animate px-4 py-2 text-sm text-secondary border border-border rounded-md bg-surface hover:opacity-60 transition-opacity"
+        style="--anim-delay: 1.25s; --anim-duration: 0.5s; --slide-from: 12px;"
       >
         GitHub ↗
       </a>
@@ -26,7 +45,10 @@
         href="https://linkedin.com/in/aryansidbatte"
         target="_blank"
         rel="noopener noreferrer"
-        class="px-4 py-2 text-sm text-secondary border border-border rounded-md bg-surface hover:opacity-60 transition-opacity"
+        data-cursor-label="Visit"
+        data-magnetic
+        class="hero-animate px-4 py-2 text-sm text-secondary border border-border rounded-md bg-surface hover:opacity-60 transition-opacity"
+        style="--anim-delay: 1.4s; --anim-duration: 0.5s; --slide-from: 12px;"
       >
         LinkedIn ↗
       </a>
@@ -34,15 +56,18 @@
         href="/resume.pdf"
         target="_blank"
         rel="noopener noreferrer"
-        class="px-4 py-2 text-sm bg-primary text-page rounded-md hover:opacity-60 transition-opacity"
+        data-cursor-label="Open"
+        data-magnetic
+        class="hero-animate px-4 py-2 text-sm bg-primary text-page rounded-md hover:opacity-60 transition-opacity"
+        style="--anim-delay: 1.55s; --anim-duration: 0.5s; --slide-from: 12px;"
       >
         Resume ↗
       </a>
     </div>
   </div>
 
-  <!-- Scroll indicator -->
-  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-sm animate-bounce">
+  <!-- Scroll indicator: fadeIn at 1.9s then bounces -->
+  <div class="hero-bounce absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-sm">
     ↓
   </div>
 </section>

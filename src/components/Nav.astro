@@ -2,18 +2,19 @@
 import NavDrawer from './NavDrawer.tsx'
 ---
 
-<header class="fixed top-0 left-0 right-0 z-30 bg-surface border-b border-border">
+<header class="hero-fade fixed top-0 left-0 right-0 z-30 bg-surface border-b border-border"
+  style="--anim-delay: 0.25s; --anim-duration: 0.6s;">
   <nav class="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
     <!-- Logo / name -->
-    <a href="/" class="font-semibold text-primary text-sm hover:opacity-60 transition-opacity">
+    <a href="/" data-cursor-label="" class="font-semibold text-primary text-sm hover:opacity-60 transition-opacity">
       Aryan Sidbatte
     </a>
 
     <!-- Desktop links -->
     <div class="hidden md:flex items-center gap-8">
-      <a href="#work" class="text-muted text-sm hover:opacity-60 transition-opacity">Work</a>
-      <a href="#about" class="text-muted text-sm hover:opacity-60 transition-opacity">About</a>
-      <a href="#contact" class="text-muted text-sm hover:opacity-60 transition-opacity">Contact</a>
+      <a href="#work" data-cursor-label="" class="text-muted text-sm hover:opacity-60 transition-opacity">Work</a>
+      <a href="#about" data-cursor-label="" class="text-muted text-sm hover:opacity-60 transition-opacity">About</a>
+      <a href="#contact" data-cursor-label="" class="text-muted text-sm hover:opacity-60 transition-opacity">Contact</a>
     </div>
 
     <!-- Mobile hamburger (React island) -->
