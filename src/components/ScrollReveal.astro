@@ -1,0 +1,16 @@
+---
+interface Props {
+  delay?: number  // ms, default 0
+  class?: string
+}
+
+const { delay = 0, class: className = '' } = Astro.props
+---
+
+<div
+  data-reveal
+  class={className}
+  style={delay > 0 ? `transition-delay: ${delay}ms` : undefined}
+>
+  <slot />
+</div>
