@@ -1,17 +1,21 @@
 ---
-import '../styles/global.css'
+import Base from '../layouts/Base.astro'
+import Nav from '../components/Nav.astro'
+import Hero from '../components/Hero.astro'
+import Work from '../components/Work.astro'
+import About from '../components/About.astro'
+import Footer from '../components/Footer.astro'
 ---
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<title>Aryan Sidbatte</title>
-	</head>
-	<body>
-		<h1 class="text-primary font-sans text-4xl font-bold">Design system working</h1>
-		<p class="text-muted font-mono text-xs tracking-widest uppercase">Software Engineer</p>
-	</body>
-</html>
+
+<Base
+  title="Aryan Sidbatte — Software Engineer"
+  description="CS + Game Design grad. Ships web apps and game systems. Looking for SWE, fullstack, and game dev work."
+>
+  <Nav />
+  <main>
+    <Hero />
+    <Work />
+    <About />
+  </main>
+  <Footer />
+</Base>
