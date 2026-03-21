@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro'
+---
+
+<Base
+  title="Wayward Suns — Aryan Sidbatte"
+  description="Case study: top-down action game in Unity 6 with elemental weapon combination, A* enemy AI, and a full UI/UX system."
+>
+  <main class="max-w-4xl mx-auto px-6 pt-20 pb-24">
+
+    <!-- Back link -->
+    <a href="/" class="inline-block text-sm text-muted hover:opacity-60 transition-opacity mb-10">
+      ← Back
+    </a>
+
+    <!-- Header -->
+    <div class="mb-12">
+      <h1 class="text-3xl font-bold text-primary tracking-tight mb-3">Wayward Suns</h1>
+      <p class="text-sm text-secondary mb-5">
+        Top-down action game with elemental weapon combination and enemy AI.
+      </p>
+      <div class="flex flex-wrap gap-2 mb-5">
+        {['Unity 6', 'C#', 'A*', 'Cinemachine', 'TextMesh Pro'].map(tag => (
+          <span class="font-mono text-[10px] text-muted border border-border bg-page px-2 py-1 rounded">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <a
+        href="https://github.com/aryansidbatte/wayward-suns"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm text-muted hover:underline underline-offset-2 transition-all"
+      >
+        View on GitHub ↗
+      </a>
+    </div>
+
+    <!-- Overview -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-3">Overview</h2>
+      <p class="text-sm text-secondary leading-[1.7]">
+        Top-down action game in Unity 6. You move through combat rooms, collect elemental weapons,
+        and combine them into hybrid loadouts. My team shipped this over a quarter — 109 commits —
+        and presented it at the CMPM 171 showcase at UC Santa Cruz.
+      </p>
+    </section>
+
+    <!-- My role -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-3">My role</h2>
+      <p class="text-sm text-secondary leading-[1.7]">
+        UI/UX engineering lead. I owned the main menu, pause menu, HUD, win/loss/credits screens,
+        floating damage numbers, a full control rebinding system, scene transitions, and a greyscale
+        accessibility mode.
+      </p>
+    </section>
+
+    <!-- Key systems -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-6">Key systems</h2>
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Weapon combination</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            6 elemental types, each with primary and secondary attacks. You carry up to 4 and merge
+            them at combination stations to get hybrid loadouts.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Enemy AI</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            3 types. The Lizard dashes in and retreats. The Mage keeps its distance and throws
+            fireballs. The Juggernaut has 200 HP and just walks at you.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Navigation</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            A* pathfinding for all enemies across level geometry.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Screenshots -->
+    <section class="mb-12">
+      <h2 class="text-lg font-semibold text-primary mb-6">Screenshots</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <img
+          src="/images/wayward-suns-1.webp"
+          alt="Wayward Suns gameplay screenshot"
+          width="840"
+          height="472"
+          loading="eager"
+          class="rounded-lg border border-border w-full"
+        />
+        <img
+          src="/images/wayward-suns-2.webp"
+          alt="Wayward Suns weapon station screenshot"
+          width="840"
+          height="472"
+          loading="lazy"
+          class="rounded-lg border border-border w-full"
+        />
+      </div>
+    </section>
+
+    <!-- Repo CTA -->
+    <a
+      href="https://github.com/aryansidbatte/wayward-suns"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="inline-block px-5 py-2.5 text-sm text-secondary border border-border bg-surface hover:opacity-60 transition-opacity rounded-md"
+    >
+      View the repo on GitHub ↗
+    </a>
+
+  </main>
+</Base>
