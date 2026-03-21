@@ -49,13 +49,22 @@ export default function CustomCursor() {
       magneticRefs.current.forEach(({ el, rect }) => {
         const cx = rect.left + rect.width / 2
         const cy = rect.top  + rect.height / 2
-        const dist = Math.sqrt((mouseX - cx) ** 2 + (mouseY - cy) ** 2)
+        const pad = 20
+        const within =
+          mouseX >= rect.left - pad && mouseX <= rect.right + pad &&
+          mouseY >= rect.top  - pad && mouseY <= rect.bottom + pad
         const htmlEl = el as HTMLElement
-        if (dist < 80) {
+        if (within) {
+          // Override any CSS transition (e.g. from [data-reveal]) so the
+          // magnetic pull is instant — not eased over 0.5s with stagger delay
+          htmlEl.style.transition = 'transform 0s'
+          htmlEl.style.transitionDelay = '0ms'
           const dx = Math.max(-12, Math.min(12, (mouseX - cx) * 0.28))
           const dy = Math.max(-12, Math.min(12, (mouseY - cy) * 0.28))
           htmlEl.style.transform = `translate(${dx}px, ${dy}px)`
         } else {
+          htmlEl.style.transition = ''
+          htmlEl.style.transitionDelay = ''
           htmlEl.style.transform = ''
         }
       })
@@ -95,7 +104,10 @@ export default function CustomCursor() {
       window.removeEventListener('resize', cacheMagneticRects)
       window.removeEventListener('scroll', cacheMagneticRects)
       document.querySelectorAll('[data-magnetic]').forEach(el => {
-        ;(el as HTMLElement).style.transform = ''
+        const htmlEl = el as HTMLElement
+        htmlEl.style.transition = ''
+        htmlEl.style.transitionDelay = ''
+        htmlEl.style.transform = ''
       })
     }
   }, [])
