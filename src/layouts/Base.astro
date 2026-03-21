@@ -1,0 +1,39 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Aryan Sidbatte — Software Engineer',
+  description = 'CS + Game Design graduate building full-stack apps and game systems. Open to SWE, fullstack, and game dev roles.',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- OG Tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://aryansidbatte.github.io" />
+    <meta property="og:image" content="https://avatars.githubusercontent.com/aryansidbatte" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://aryansidbatte.github.io" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
