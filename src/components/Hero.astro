@@ -72,34 +72,24 @@
     </div>
     </div>
 
-    <!-- Avatar placeholder -->
-    <div
-      id="avatar-wrapper"
-      class="hero-animate relative flex-shrink-0 w-20 h-20 md:w-[120px] md:h-[120px] rounded-full overflow-hidden border-2 border-border order-first md:order-last"
+    <!-- Avatar -->
+    <img
+      src="/images/avatar.jpeg"
+      alt="Aryan Sidbatte"
+      class="hero-animate flex-shrink-0 w-[130px] h-[130px] md:w-[210px] md:h-[210px] rounded-full object-cover object-top border-2 border-border order-first md:order-last"
       style="--anim-delay: 0.72s; --anim-duration: 0.75s; --slide-from: 20px;"
-      aria-hidden="true"
-    >
-      <canvas id="avatar-canvas" class="absolute inset-0 w-full h-full"></canvas>
-      <!-- Initials overlay — comes after canvas in DOM, so naturally renders above it. No z-index needed. -->
-      <div class="absolute inset-0 flex items-center justify-center">
-        <span
-          class="font-serif font-semibold"
-          style="font-size:clamp(18px,2vw,28px);color:rgba(120,113,108,0.6);"
-        >AS</span>
-      </div>
-    </div>
+    />
   </div>
 
   <!-- Scroll indicator: fadeIn at 1.9s then bounces -->
-  <div class="hero-bounce absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-sm">
+  <a href="#work" data-cursor-scale class="hero-bounce absolute bottom-8 left-1/2 -translate-x-1/2 text-muted text-sm hover:text-primary transition-colors" aria-label="Scroll to work">
     ↓
-  </div>
+  </a>
 </section>
 
 <script>
 import {
   PART_RADIUS,
-  generateParticles,
   scaleParticles,
   applyPartingForce,
   updateVelocity,
@@ -186,66 +176,4 @@ section.addEventListener('mouseleave', () => {
   cursor.y = -9999
 })
 
-// ── Avatar mini canvas ──────────────────────────────────────────────
-const avatarWrapper = document.getElementById('avatar-wrapper') as HTMLElement
-const avatarCanvas = document.getElementById('avatar-canvas') as HTMLCanvasElement
-const avatarCtx = avatarCanvas.getContext('2d')!
-
-let avatarW = avatarWrapper.offsetWidth
-let avatarH = avatarWrapper.offsetHeight
-let avatarParticles: Particle[] = []
-let avatarRafId: number
-
-function initAvatarCanvas(w: number, h: number) {
-  const dpr = window.devicePixelRatio || 1
-  avatarCanvas.width = w * dpr
-  avatarCanvas.height = h * dpr
-  avatarCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
-}
-
-function drawAvatar() {
-  avatarCtx.fillStyle = 'rgba(245,245,244,0.3)'
-  avatarCtx.fillRect(0, 0, avatarW, avatarH)
-
-  for (const p of avatarParticles) {
-    applyPartingForce(p, -9999, -9999, false)
-    updateVelocity(p, t)
-    p.x += p.vx
-    p.y += p.vy
-    wrapEdges(p, avatarW, avatarH)
-
-    avatarCtx.beginPath()
-    avatarCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-    avatarCtx.fillStyle = 'rgba(28,25,23,0.2)'
-    avatarCtx.fill()
-  }
-
-  avatarRafId = requestAnimationFrame(drawAvatar)
-}
-
-function startAvatar(w: number, h: number) {
-  cancelAnimationFrame(avatarRafId)
-  avatarW = w
-  avatarH = h
-  initAvatarCanvas(w, h)
-  avatarParticles = generateParticles(w, h, 50)
-  avatarRafId = requestAnimationFrame(drawAvatar)
-}
-
-// Initial start
-if (avatarW && avatarH) startAvatar(avatarW, avatarH)
-
-// Breakpoint resize: 80px ↔ 120px at md (768px)
-const mq = window.matchMedia('(min-width: 768px)')
-mq.addEventListener('change', () => {
-  const newW = avatarWrapper.offsetWidth
-  const newH = avatarWrapper.offsetHeight
-  if (newW === avatarW && newH === avatarH) return
-  cancelAnimationFrame(avatarRafId)
-  avatarParticles = scaleParticles(avatarParticles, avatarW, avatarH, newW, newH)
-  avatarW = newW
-  avatarH = newH
-  initAvatarCanvas(newW, newH)
-  avatarRafId = requestAnimationFrame(drawAvatar)
-})
 </script>
