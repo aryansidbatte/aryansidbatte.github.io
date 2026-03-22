@@ -3,7 +3,12 @@
 ---
 
 <section class="min-h-svh flex flex-col items-center justify-center px-6 relative pt-14">
-  <div class="max-w-4xl w-full">
+  <canvas
+    id="sand-drift"
+    aria-hidden="true"
+    style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"
+  ></canvas>
+  <div class="max-w-4xl w-full" style="position:relative;z-index:1;">
     <!-- Eyebrow: delay 0.5s -->
     <p
       class="hero-animate font-mono text-[10px] tracking-[2px] text-muted uppercase mb-4"
@@ -71,3 +76,93 @@
     ↓
   </div>
 </section>
+
+<script>
+import {
+  PART_RADIUS,
+  scaleParticles,
+  applyPartingForce,
+  updateVelocity,
+  wrapEdges,
+  type Particle,
+} from '../lib/sand-drift'
+
+const section = document.querySelector('section') as HTMLElement
+const canvas = document.getElementById('sand-drift') as HTMLCanvasElement
+const ctx = canvas.getContext('2d')!
+
+let W: number, H: number
+let particles: Particle[] = []
+let prevW: number | undefined
+let prevH: number | undefined
+let t = 0
+let rafId: number
+
+const cursor = { x: -9999, y: -9999, active: false }
+
+function initCanvas() {
+  const dpr = window.devicePixelRatio || 1
+  canvas.width = W * dpr
+  canvas.height = H * dpr
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
+}
+
+function draw() {
+  // 1. Trail fade
+  ctx.fillStyle = 'rgba(250,250,249,0.35)'
+  ctx.fillRect(0, 0, W, H)
+
+  // 2. Update and draw each particle
+  for (const p of particles) {
+    const dx = p.x - cursor.x
+    const dy = p.y - cursor.y
+    const d = Math.sqrt(dx * dx + dy * dy)
+
+    applyPartingForce(p, cursor.x, cursor.y, cursor.active)
+    updateVelocity(p, t)
+    p.x += p.vx
+    p.y += p.vy
+    wrapEdges(p, W, H)
+
+    ctx.beginPath()
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+    ctx.fillStyle = cursor.active && d < PART_RADIUS
+      ? 'rgba(28,25,23,0.08)'
+      : 'rgba(28,25,23,0.22)'
+    ctx.fill()
+  }
+
+  t++
+  rafId = requestAnimationFrame(draw)
+}
+
+// Single init path via ResizeObserver (fires once immediately on observe)
+const ro = new ResizeObserver(() => {
+  cancelAnimationFrame(rafId)
+  W = section.offsetWidth
+  H = section.offsetHeight
+  if (!W || !H) return
+  initCanvas()
+  particles = scaleParticles(particles, prevW, prevH, W, H)
+  prevW = W
+  prevH = H
+  rafId = requestAnimationFrame(draw)
+})
+ro.observe(section)
+
+// Mouse tracking
+section.addEventListener('mousemove', e => {
+  const r = section.getBoundingClientRect()
+  const x = e.clientX - r.left
+  const y = e.clientY - r.top
+  cursor.x = x
+  cursor.y = y
+  cursor.active = x >= 0 && x <= W && y >= 0 && y <= H
+})
+
+section.addEventListener('mouseleave', () => {
+  cursor.active = false
+  cursor.x = -9999
+  cursor.y = -9999
+})
+</script>
