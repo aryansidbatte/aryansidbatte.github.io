@@ -131,8 +131,8 @@ export default function CustomCursor() {
       aria-hidden="true"
       style={{
         position: 'fixed',
-        left: 0,
-        top: 0,
+        left: -9999,
+        top: -9999,
         width: pillWidth,
         height: pillHeight,
         borderRadius: pillRadius,

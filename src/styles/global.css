@@ -56,6 +56,11 @@
   html.cursor-custom * {
     cursor: none !important;
   }
+
+  /* hide cursor dot on touch devices — pointer never moves so it stays at 0,0 */
+  @media (pointer: coarse) {
+    [data-cursor-dot] { display: none; }
+  }
 }
 
 /* ─── Keyframes ─── */
