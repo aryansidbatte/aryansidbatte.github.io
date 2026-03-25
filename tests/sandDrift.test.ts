@@ -3,6 +3,8 @@ import {
   generateParticles,
   scaleParticles,
   applyPartingForce,
+  applyOrbitForce,
+  applyExplosionForce,
   updateVelocity,
   wrapEdges,
   type Particle,
@@ -111,6 +113,37 @@ describe('applyPartingForce', () => {
   })
 })
 
+describe('applyOrbitForce', () => {
+  it('does not divide by zero when particle is exactly at center', () => {
+    const p = makeParticle({ x: 100, y: 100, vx: 0, vy: 0 })
+    expect(() => applyOrbitForce(p, 100, 100, 1.2)).not.toThrow()
+    expect(p.vx).toBe(0)
+    expect(p.vy).toBe(0)
+  })
+
+  it('applies force when particle is away from center', () => {
+    const p = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    applyOrbitForce(p, 100, 100, 1.2)
+    expect(p.vx).toBeLessThan(0)
+    expect(p.vy).toBeGreaterThan(0)
+  })
+
+  it('scales force with strength', () => {
+    const p1 = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    const p2 = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    applyOrbitForce(p1, 100, 100, 1.0)
+    applyOrbitForce(p2, 100, 100, 2.0)
+    expect(Math.abs(p2.vx)).toBeCloseTo(Math.abs(p1.vx) * 2, 5)
+    expect(Math.abs(p2.vy)).toBeCloseTo(Math.abs(p1.vy) * 2, 5)
+  })
+
+  it('clockwise: particle above center gets rightward tangential push', () => {
+    const p = makeParticle({ x: 100, y: 0, vx: 0, vy: 0 })
+    applyOrbitForce(p, 100, 100, 1.0)
+    expect(p.vx).toBeGreaterThan(0)
+  })
+})
+
 describe('updateVelocity', () => {
   it('moves vx toward baseVx over time', () => {
     const p = makeParticle({ vx: 0, baseVx: 0.2 })
@@ -129,6 +162,36 @@ describe('updateVelocity', () => {
     const p = makeParticle({ vy: 0, baseVx: 0.2 })
     for (let i = 0; i < 100; i++) updateVelocity(p, i)
     expect(Math.abs(p.vy)).toBeLessThan(0.2) // bounded by wobble amplitude
+  })
+})
+
+describe('applyExplosionForce', () => {
+  it('does not divide by zero when particle is exactly at center', () => {
+    const p = makeParticle({ x: 100, y: 100, vx: 0, vy: 0 })
+    expect(() => applyExplosionForce(p, 100, 100, 6.0)).not.toThrow()
+    expect(p.vx).toBe(0)
+    expect(p.vy).toBe(0)
+  })
+
+  it('pushes particle radially away from center', () => {
+    const p = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    applyExplosionForce(p, 100, 100, 6.0)
+    expect(p.vx).toBeGreaterThan(0)
+    expect(p.vy).toBeCloseTo(0, 1)
+  })
+
+  it('pushes particle to the left when it is left of center', () => {
+    const p = makeParticle({ x: 0, y: 100, vx: 0, vy: 0 })
+    applyExplosionForce(p, 100, 100, 6.0)
+    expect(p.vx).toBeLessThan(0)
+  })
+
+  it('scales force with strength', () => {
+    const p1 = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    const p2 = makeParticle({ x: 200, y: 100, vx: 0, vy: 0 })
+    applyExplosionForce(p1, 100, 100, 1.0)
+    applyExplosionForce(p2, 100, 100, 3.0)
+    expect(p2.vx).toBeCloseTo(p1.vx * 3, 5)
   })
 })
 

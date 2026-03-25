@@ -58,6 +58,45 @@ export function applyPartingForce(
   }
 }
 
+// Pulls particle toward (cx, cy) with a clockwise tangential offset.
+// Radial and tangential components are equal magnitude, both scaled by strength.
+// Guard: no-op if d === 0 (particle exactly at center).
+export function applyOrbitForce(
+  p: Particle,
+  cx: number,
+  cy: number,
+  strength: number
+): void {
+  const dx = p.x - cx
+  const dy = p.y - cy
+  const d = Math.sqrt(dx * dx + dy * dy)
+  if (d === 0) return
+  // Radial: pull toward center
+  const rx = -(dx / d) * strength
+  const ry = -(dy / d) * strength
+  // Tangential: clockwise perpendicular (-dy/d, dx/d)
+  const tx = (-dy / d) * strength
+  const ty = (dx / d) * strength
+  p.vx += rx + tx
+  p.vy += ry + ty
+}
+
+// Pushes particle radially away from (cx, cy), scaled by strength.
+// Guard: no-op if d === 0.
+export function applyExplosionForce(
+  p: Particle,
+  cx: number,
+  cy: number,
+  strength: number
+): void {
+  const dx = p.x - cx
+  const dy = p.y - cy
+  const d = Math.sqrt(dx * dx + dy * dy)
+  if (d === 0) return
+  p.vx += (dx / d) * strength
+  p.vy += (dy / d) * strength
+}
+
 // Advances particle velocity one step toward the wind target.
 // t is a monotonically increasing integer frame counter.
 export function updateVelocity(p: Particle, t: number): void {
