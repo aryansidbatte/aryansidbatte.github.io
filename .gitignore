@@ -26,3 +26,6 @@ pnpm-debug.log*
 
 # superpowers brainstorm sessions
 .superpowers/
+
+# resume — never commit
+public/resume.pdf
