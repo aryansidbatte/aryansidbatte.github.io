@@ -72,13 +72,22 @@
     </div>
     </div>
 
-    <!-- Avatar -->
-    <img
-      src="/images/avatar.jpeg"
-      alt="Aryan Sidbatte"
-      class="hero-animate flex-shrink-0 w-[130px] h-[130px] md:w-[210px] md:h-[210px] rounded-full object-cover object-top border-2 border-border order-first md:order-last"
-      style="--anim-delay: 0.72s; --anim-duration: 0.75s; --slide-from: 20px;"
-    />
+    <!-- Avatar: wrapper is the click target + layout anchor (never rotates).
+         Inner img receives the rotateY transform so hit area stays full-size. -->
+    <div
+      id="hero-avatar-wrapper"
+      class="hero-animate flex-shrink-0 w-[130px] h-[130px] md:w-[210px] md:h-[210px] rounded-full order-first md:order-last"
+      style="--anim-delay: 0.72s; --anim-duration: 0.75s; --slide-from: 20px; cursor: pointer; user-select: none; -webkit-user-select: none;"
+    >
+      <img
+        id="hero-avatar"
+        src="/images/avatar.jpeg"
+        alt="Aryan Sidbatte"
+        draggable="false"
+        class="w-full h-full rounded-full object-cover object-top border-2 border-border"
+        style="-webkit-user-drag: none;"
+      />
+    </div>
   </div>
 
   <!-- Scroll indicator: fadeIn at 1.9s then bounces -->
@@ -87,11 +96,14 @@
   </a>
 </section>
 
+
 <script>
 import {
   PART_RADIUS,
   scaleParticles,
   applyPartingForce,
+  applyOrbitForce,
+  applyExplosionForce,
   updateVelocity,
   wrapEdges,
   type Particle,
@@ -110,6 +122,45 @@ let rafId: number
 
 const cursor = { x: -9999, y: -9999, active: false }
 
+// Easter egg state
+const ENERGY_PER_CLICK = 0.4
+const ENERGY_DECAY = 0.98
+const ORBIT_THRESHOLD = 0.65
+const SPIN_DEG_PER_ENERGY = 12
+const COAST_DEG_PER_FRAME = 2
+const EXPLOSION_FRAMES = 20
+const ORBIT_STRENGTH = 0.5      // lower = closer orbit, higher = wider
+const EXPLOSION_STRENGTH = 8.0
+
+let energy = 0
+let inOrbit = false
+let exploding = false
+let explodeFrames = 0
+let avatarCx = -9999
+let avatarCy = -9999
+let spinAngle = 0               // current Y-rotation in degrees, JS-driven
+
+// Wrapper: layout anchor + click target (never transforms — hit area stays full-size).
+// Inner img: receives rotateY so the visual spins without shrinking the clickable area.
+const avatarWrapper = document.getElementById('hero-avatar-wrapper') as HTMLDivElement
+const avatarEl = document.getElementById('hero-avatar') as HTMLImageElement
+
+// After the entrance animation finishes, remove hero-animate so its forwards fill
+// no longer overrides style.transform (CSS animations beat inline styles).
+avatarWrapper.addEventListener('animationend', (e) => {
+  if (e.animationName === 'slideUp') {
+    avatarWrapper.classList.remove('hero-animate')
+    avatarWrapper.style.opacity = '1'
+  }
+}, { once: true })
+
+function updateAvatarCenter() {
+  const avatarRect = avatarWrapper.getBoundingClientRect()
+  const sectionRect = section.getBoundingClientRect()
+  avatarCx = avatarRect.left + avatarRect.width / 2 - sectionRect.left
+  avatarCy = avatarRect.top + avatarRect.height / 2 - sectionRect.top
+}
+
 function initCanvas() {
   const dpr = window.devicePixelRatio || 1
   canvas.width = W * dpr
@@ -118,17 +169,67 @@ function initCanvas() {
 }
 
 function draw() {
+  // Energy decay
+  energy *= ENERGY_DECAY
+
+  // JS-driven spin: increment spinAngle by energy each frame.
+  // As energy decays, increments shrink → natural visual deceleration.
+  // CSS animations override style.transform, so hero-animate is removed on
+  // animationend above; after that, style.transform is ours to set freely.
+  const degPerFrame = energy * SPIN_DEG_PER_ENERGY
+  const isCoasting = degPerFrame < COAST_DEG_PER_FRAME && spinAngle > 0.5
+  const speed = isCoasting ? COAST_DEG_PER_FRAME : degPerFrame
+
+  if (speed > 0 || spinAngle > 0.5) {
+    const prevAngle = spinAngle
+    spinAngle = (spinAngle + speed) % 360
+    // While coasting, stop as soon as we wrap past 0 (clean stop at full revolution)
+    if (isCoasting && prevAngle > spinAngle && (prevAngle - spinAngle) > 180) {
+      spinAngle = 0
+      avatarEl.style.transform = ''
+    } else {
+      avatarEl.style.transform = `perspective(400px) rotateY(${spinAngle.toFixed(1)}deg)`
+    }
+  } else if (spinAngle <= 0.5 && spinAngle > 0) {
+    spinAngle = 0
+    avatarEl.style.transform = ''
+  }
+
+  // State transitions
+  if (!inOrbit && energy > ORBIT_THRESHOLD) inOrbit = true
+  if (inOrbit && energy <= ORBIT_THRESHOLD && !exploding) {
+    inOrbit = false
+    exploding = true
+    explodeFrames = EXPLOSION_FRAMES
+  }
+  if (exploding) {
+    explodeFrames--
+    if (explodeFrames <= 0) exploding = false
+  }
+
   // 1. Trail fade
   ctx.fillStyle = 'rgba(250,250,249,0.35)'
   ctx.fillRect(0, 0, W, H)
 
   // 2. Update and draw each particle
   for (const p of particles) {
-    const dx = p.x - cursor.x
-    const dy = p.y - cursor.y
-    const d = Math.sqrt(dx * dx + dy * dy)
+    const dxC = p.x - cursor.x
+    const dyC = p.y - cursor.y
 
-    applyPartingForce(p, cursor.x, cursor.y, cursor.active)
+    if (exploding) {
+      applyExplosionForce(p, avatarCx, avatarCy, EXPLOSION_STRENGTH)
+    } else if (inOrbit) {
+      applyOrbitForce(p, avatarCx, avatarCy, ORBIT_STRENGTH)
+      // Per-particle radial oscillation thickens the orbit band
+      const dxA = p.x - avatarCx
+      const dyA = p.y - avatarCy
+      const d = Math.sqrt(dxA * dxA + dyA * dyA) || 1
+      const spread = Math.sin(t * 0.02 + p.baseVx * 40 + p.size * 20) * ORBIT_STRENGTH * 0.8
+      p.vx += (dxA / d) * spread
+      p.vy += (dyA / d) * spread
+    } else {
+      applyPartingForce(p, cursor.x, cursor.y, cursor.active)
+    }
     updateVelocity(p, t)
     p.x += p.vx
     p.y += p.vy
@@ -136,7 +237,7 @@ function draw() {
 
     ctx.beginPath()
     ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
-    ctx.fillStyle = cursor.active && d < PART_RADIUS
+    ctx.fillStyle = cursor.active && (dxC * dxC + dyC * dyC) < PART_RADIUS * PART_RADIUS
       ? 'rgba(28,25,23,0.08)'
       : 'rgba(28,25,23,0.22)'
     ctx.fill()
@@ -156,9 +257,22 @@ const ro = new ResizeObserver(() => {
   particles = scaleParticles(particles, prevW, prevH, W, H)
   prevW = W
   prevH = H
+  updateAvatarCenter()
   rafId = requestAnimationFrame(draw)
 })
 ro.observe(section)
+
+window.addEventListener('scroll', updateAvatarCenter, { passive: true })
+
+avatarWrapper.addEventListener('click', () => {
+  energy += ENERGY_PER_CLICK
+  // If energy rebounds above threshold during explosion, cancel explosion and re-enter orbit
+  if (exploding && energy > ORBIT_THRESHOLD) {
+    exploding = false
+    explodeFrames = 0
+    inOrbit = true
+  }
+})
 
 // Mouse tracking
 section.addEventListener('mousemove', e => {
