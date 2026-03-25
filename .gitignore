@@ -29,3 +29,6 @@ pnpm-debug.log*
 
 # resume — never commit
 public/resume.pdf
+
+# local docs
+docs/
