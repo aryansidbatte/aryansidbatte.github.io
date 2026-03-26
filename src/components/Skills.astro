@@ -1,0 +1,14 @@
+---
+import SkillsInteractive from './SkillsInteractive.tsx'
+import ScrollReveal from './ScrollReveal.astro'
+
+---
+
+<section id="skills" class="py-24 px-6 border-t border-border">
+  <div class="max-w-4xl mx-auto">
+    <ScrollReveal>
+      <p class="font-mono text-[10px] tracking-[2px] text-muted uppercase mb-10">Skills</p>
+    </ScrollReveal>
+    <SkillsInteractive client:idle />
+  </div>
+</section>
