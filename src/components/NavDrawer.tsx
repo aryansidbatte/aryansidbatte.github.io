@@ -31,6 +31,7 @@ export default function NavDrawer() {
 
   const links = [
     { label: 'Projects', href: '#work' },
+    { label: 'Skills', href: '#skills' },
     { label: 'About', href: '#about' },
     { label: 'Contact', href: '#contact' },
   ]

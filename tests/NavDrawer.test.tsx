@@ -20,6 +20,7 @@ describe('NavDrawer', () => {
     await user.click(screen.getByRole('button', { name: /open menu/i }))
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.getByText('Projects')).toBeInTheDocument()
+    expect(screen.getByText('Skills')).toBeInTheDocument()
     expect(screen.getByText('About')).toBeInTheDocument()
     expect(screen.getByText('Contact')).toBeInTheDocument()
   })

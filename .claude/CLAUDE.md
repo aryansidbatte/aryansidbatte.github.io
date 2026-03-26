@@ -33,7 +33,6 @@ Computer Science: Computer Game Design B.S., recently graduated. Applying to SWE
 - **21st.dev**: source of UI components
 
 ## Design Principles
-- Lighthouse score 100 is the target — performance is non-negotiable
 - The site IS a design artifact. It must reflect a CS + Game Design background -- technical depth with visual polish
 - Avoid generic AI aesthetics: no purple gradients, no Inter/Roboto, no cookie-cutter layouts
 - Every visual decision should feel intentional and memorable
