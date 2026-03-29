@@ -47,7 +47,7 @@ export const projects: Project[] = [
     description: 'Full-stack recipe management with user auth, CRUD, and collaborative editing.',
     outcome: 'Built recipe CRUD, permission-based editing, and image uploads on a fullstack py4web/SQLite app.',
     stack: ['Python', 'py4web', 'JavaScript', 'SQLite'],
-    github: 'https://github.com/ucsc2025-cse183/project-12',
+    github: 'https://github.com/aryansidbatte/recipe-sharing-platform',
     featured: true,
   },
   {
