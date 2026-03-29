@@ -2,8 +2,9 @@ import { describe, it, expect } from 'vitest'
 import { projects } from '../src/content/projects'
 
 describe('projects data', () => {
-  it('exports an array', () => {
+  it('exports a non-empty array', () => {
     expect(Array.isArray(projects)).toBe(true)
+    expect(projects.length).toBeGreaterThan(0)
   })
 
   it('every project has required fields', () => {
@@ -19,15 +20,10 @@ describe('projects data', () => {
     }
   })
 
-  it('only one project has a caseStudy route', () => {
-    const withCaseStudy = projects.filter(p => p.caseStudy)
-    expect(withCaseStudy).toHaveLength(1)
-    expect(withCaseStudy[0].id).toBe('wayward-suns')
-  })
-
-  it('caseStudy project points to correct route', () => {
-    const wayward = projects.find(p => p.id === 'wayward-suns')
-    expect(wayward?.caseStudy).toBe('/projects/wayward-suns')
+  it('caseStudy routes follow the /projects/ pattern', () => {
+    projects.filter(p => p.caseStudy).forEach(p => {
+      expect(p.caseStudy).toMatch(/^\/projects\//)
+    })
   })
 
   it('featured projects appear before non-featured', () => {

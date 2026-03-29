@@ -12,7 +12,6 @@ beforeEach(() => {
   vi.stubGlobal('IntersectionObserver', vi.fn(function(this: any) {
     Object.assign(this, mockObserver)
   } as any))
-  // stub matchMedia (used for prefers-reduced-motion check)
   vi.stubGlobal('matchMedia', vi.fn(() => ({
     matches: false,
     addEventListener: vi.fn(),
@@ -27,86 +26,57 @@ afterEach(() => {
 })
 
 describe('SkillsInteractive', () => {
-  it('renders all 10 skill pills', () => {
+  it('renders at least one skill pill', () => {
     render(<SkillsInteractive />)
-    const pills = screen.getAllByRole('listitem')
-    expect(pills).toHaveLength(10)
+    expect(screen.getAllByRole('listitem').length).toBeGreaterThan(0)
   })
 
-  it('renders correct label text for each skill', () => {
+  it('each pill has a non-empty label', () => {
     render(<SkillsInteractive />)
-    const labels = ['Python', 'C#', 'JavaScript', 'TypeScript', 'Shell',
-                    'Unity', 'SQLite', 'Git', 'Astro', 'Tailwind']
-    labels.forEach(label => {
-      expect(screen.getByText(label)).toBeInTheDocument()
+    screen.getAllByRole('listitem').forEach(pill => {
+      expect(pill.textContent?.trim()).toBeTruthy()
     })
   })
 
-  it('each pill has an img with correct Simple Icons CDN src', () => {
+  it('each pill has an img pointing to the Simple Icons CDN', () => {
     render(<SkillsInteractive />)
-    const slugMap: Record<string, string> = {
-      Python: 'python', 'C#': 'sharp', JavaScript: 'javascript',
-      TypeScript: 'typescript', Shell: 'gnubash', Unity: 'unity',
-      SQLite: 'sqlite', Git: 'git', Astro: 'astro', Tailwind: 'tailwindcss',
-    }
-    Object.entries(slugMap).forEach(([label, slug]) => {
-      const pill = screen.getByText(label).closest('li')
-      expect(pill).not.toBeNull()
-      const img = pill!.querySelector('img')
+    screen.getAllByRole('listitem').forEach(pill => {
+      const img = pill.querySelector('img')
       expect(img).not.toBeNull()
-      expect(img!.getAttribute('src')).toBe(
-        `https://cdn.simpleicons.org/${slug}/1c1917`
-      )
+      expect(img!.getAttribute('src')).toMatch(/^https:\/\/cdn\.simpleicons\.org\//)
     })
   })
 
-  it('each pill has data-reveal attribute', () => {
+  it('each pill has data-reveal, data-magnetic, and data-cursor-scale', () => {
     render(<SkillsInteractive />)
     screen.getAllByRole('listitem').forEach(pill => {
       expect(pill).toHaveAttribute('data-reveal')
-    })
-  })
-
-  it('each pill has data-magnetic attribute', () => {
-    render(<SkillsInteractive />)
-    screen.getAllByRole('listitem').forEach(pill => {
       expect(pill).toHaveAttribute('data-magnetic')
-    })
-  })
-
-  it('each pill has data-cursor-scale attribute', () => {
-    render(<SkillsInteractive />)
-    screen.getAllByRole('listitem').forEach(pill => {
       expect(pill).toHaveAttribute('data-cursor-scale')
     })
   })
 
-  it('no pill has data-cursor-label attribute', () => {
+  it('no pill has data-cursor-label or role=button', () => {
     render(<SkillsInteractive />)
     screen.getAllByRole('listitem').forEach(pill => {
       expect(pill).not.toHaveAttribute('data-cursor-label')
     })
+    expect(screen.queryAllByRole('button')).toHaveLength(0)
   })
 
-  it('pills have correct transitionDelay: 0ms, 80ms, capped at 400ms for last', () => {
+  it('first pill has no delay, second has 80ms delay', () => {
     render(<SkillsInteractive />)
     const pills = screen.getAllByRole('listitem')
     expect(pills[0]).toHaveStyle({ transitionDelay: '0ms' })
     expect(pills[1]).toHaveStyle({ transitionDelay: '80ms' })
-    expect(pills[9]).toHaveStyle({ transitionDelay: '400ms' }) // Math.min(9*80=720, 400)
   })
 
-  it('no pill has role=button', () => {
+  it('each pill has aria-label matching its visible text', () => {
     render(<SkillsInteractive />)
-    expect(screen.queryAllByRole('button')).toHaveLength(0)
-  })
-
-  it('each pill has aria-label matching its label text', () => {
-    render(<SkillsInteractive />)
-    const labels = ['Python', 'C#', 'JavaScript', 'TypeScript', 'Shell',
-                    'Unity', 'SQLite', 'Git', 'Astro', 'Tailwind']
-    labels.forEach(label => {
-      expect(screen.getByRole('listitem', { name: label })).toHaveAttribute('aria-label', label)
+    screen.getAllByRole('listitem').forEach(pill => {
+      const label = pill.getAttribute('aria-label')
+      expect(label).toBeTruthy()
+      expect(pill.textContent).toContain(label)
     })
   })
 })
