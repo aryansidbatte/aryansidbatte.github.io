@@ -1,16 +1,20 @@
 import { useEffect, useRef } from 'react'
 
 const SKILLS = [
-  { label: 'Python',     slug: 'python' },
-  { label: 'C#',         slug: 'sharp' },
-  { label: 'JavaScript', slug: 'javascript' },
-  { label: 'TypeScript', slug: 'typescript' },
-  { label: 'Shell',      slug: 'gnubash' },
-  { label: 'Unity',      slug: 'unity' },
-  { label: 'SQLite',     slug: 'sqlite' },
-  { label: 'Git',        slug: 'git' },
-  { label: 'Astro',      slug: 'astro' },
-  { label: 'Tailwind',   slug: 'tailwindcss' },
+  { label: 'Python',          slug: 'python' },
+  { label: 'C#',              slug: 'sharp' },
+  { label: 'JavaScript',      slug: 'javascript' },
+  { label: 'TypeScript',      slug: 'typescript' },
+  { label: 'Shell',           slug: 'gnubash' },
+  { label: 'Unity',           slug: 'unity' },
+  { label: 'PostgreSQL',      slug: 'postgresql' },
+  { label: 'SQLite',          slug: 'sqlite' },
+  { label: 'Docker',          slug: 'docker' },
+  { label: 'Terraform',       slug: 'terraform' },
+  { label: 'GitHub Actions',  slug: 'githubactions' },
+  { label: 'Git',             slug: 'git' },
+  { label: 'Astro',           slug: 'astro' },
+  { label: 'Tailwind',        slug: 'tailwindcss' },
 ]
 
 export default function SkillsInteractive() {

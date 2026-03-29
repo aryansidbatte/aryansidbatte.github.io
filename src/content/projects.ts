@@ -12,6 +12,26 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    id: 'bettingbot',
+    title: 'Bettingbot',
+    description: 'Discord bot with horse races, parimutuel wagering, and voice rewards. Runs on AWS ECS Fargate with a full CI/CD pipeline.',
+    outcome: 'Deployed to AWS ECS Fargate with RDS Postgres, Docker, Terraform, and GitHub Actions. Live in a Discord server.',
+    stack: ['Python', 'discord.py', 'PostgreSQL', 'Docker', 'ECS Fargate', 'Terraform'],
+    github: 'https://github.com/aryansidbatte/bettingbot',
+    caseStudy: '/projects/bettingbot',
+    featured: true,
+  },
+  {
+    id: 'portfolio',
+    title: 'This site',
+    description: 'Personal portfolio built with Astro, Tailwind v4, and React islands. Custom cursor, magnetic elements, particle easter egg.',
+    outcome: 'Designed and built from scratch. Deployed on GitHub Pages via GitHub Actions.',
+    stack: ['Astro', 'Tailwind', 'TypeScript', 'React'],
+    github: 'https://github.com/aryansidbatte/aryansidbatte.github.io',
+    demo: 'https://aryansidbatte.github.io',
+    featured: true,
+  },
+  {
     id: 'wayward-suns',
     title: 'Wayward Suns',
     description: 'Top-down action game with elemental weapon combination and enemy AI. 4-person team, 109 commits.',

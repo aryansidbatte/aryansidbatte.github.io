@@ -1,0 +1,120 @@
+---
+import Base from '../../layouts/Base.astro'
+---
+
+<Base
+  title="Bettingbot — Aryan Sidbatte"
+  description="Case study: Discord betting bot with horse races, parimutuel wagering, and AWS ECS Fargate deployment via Terraform and GitHub Actions."
+>
+  <main class="max-w-4xl mx-auto px-6 pt-20 pb-24">
+
+    <!-- Back link -->
+    <a href="/" data-cursor-scale class="inline-block text-sm text-muted hover:opacity-60 transition-opacity mb-10">
+      ← Back
+    </a>
+
+    <!-- Header -->
+    <div class="mb-12">
+      <h1 class="text-3xl font-bold text-primary tracking-tight mb-3">Bettingbot</h1>
+      <p class="text-sm text-secondary mb-5">
+        Discord betting bot with horse races, parimutuel wagering, and AWS deployment.
+      </p>
+      <div class="flex flex-wrap gap-2 mb-5">
+        {['Python', 'discord.py', 'PostgreSQL', 'Docker', 'ECS Fargate', 'Terraform', 'GitHub Actions'].map(tag => (
+          <span class="font-mono text-[10px] text-muted border border-border bg-page px-2 py-1 rounded">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <a
+        href="https://github.com/aryansidbatte/bettingbot"
+        target="_blank"
+        rel="noopener noreferrer"
+        data-cursor-scale
+        class="text-sm text-muted hover:underline underline-offset-2 transition-all"
+      >
+        View on GitHub ↗
+      </a>
+    </div>
+
+    <!-- Overview -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-3">Overview</h2>
+      <p class="text-sm text-secondary leading-[1.7]">
+        Built for my Discord server. Members earn virtual points and spend them on custom
+        multi-outcome bets or simulated horse races. Started on a Raspberry Pi running SQLite,
+        then migrated to AWS ECS Fargate with RDS Postgres — I wanted to see what real production
+        infrastructure actually looked like. Push to main, tests run, image builds, ECS updates.
+      </p>
+    </section>
+
+    <!-- My role -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-3">My role</h2>
+      <p class="text-sm text-secondary leading-[1.7]">
+        Solo. I wrote all the code, designed the database schema, built the Terraform
+        infrastructure, and set up the CI/CD pipeline.
+      </p>
+    </section>
+
+    <!-- Key systems -->
+    <section class="mb-10">
+      <h2 class="text-lg font-semibold text-primary mb-6">Key systems</h2>
+      <div class="space-y-6">
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Horse races</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            4–6 randomly selected horses, 60-second betting window. Before the race starts,
+            a Monte Carlo simulation runs 10,000 iterations to estimate win probabilities.
+            The race is a single Discord message edited 9 times for animated progress.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Custom bets</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            Any member can create a multi-outcome bet, others wager points, and the creator
+            resolves it. Payouts split from the pool proportionally.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">Voice channel rewards</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            Members earn 1 carat per hour in voice chat. A background loop ticks every minute
+            and writes to the database so state survives restarts.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-sm font-medium text-primary mb-2">AWS deployment</h3>
+          <p class="text-sm text-secondary leading-[1.7]">
+            Container runs on ECS Fargate at 0.25 vCPU / 512 MB. Credentials live in Secrets
+            Manager, injected at startup. CloudWatch captures structured JSON logs and fires
+            a crash alert via SNS.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture diagram -->
+    <section class="mb-12">
+      <h2 class="text-lg font-semibold text-primary mb-6">Architecture</h2>
+      <img
+        src="/images/bettingbot-architecture.svg"
+        alt="Bettingbot AWS architecture diagram"
+        loading="lazy"
+        class="rounded-lg border border-border w-full bg-surface p-4"
+      />
+    </section>
+
+    <!-- Repo CTA -->
+    <a
+      href="https://github.com/aryansidbatte/bettingbot"
+      target="_blank"
+      rel="noopener noreferrer"
+      data-cursor-label="Visit"
+      class="inline-block px-5 py-2.5 text-sm text-secondary border border-border bg-surface hover:opacity-60 transition-opacity rounded-md"
+    >
+      View the repo on GitHub ↗
+    </a>
+
+  </main>
+</Base>
