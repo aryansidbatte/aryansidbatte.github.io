@@ -12,6 +12,7 @@ const SKILLS = [
   { label: 'Docker',          slug: 'docker' },
   { label: 'Terraform',       slug: 'terraform' },
   { label: 'GitHub Actions',  slug: 'githubactions' },
+  { label: 'AWS',             slug: 'amazonwebservices' },
   { label: 'Git',             slug: 'git' },
   { label: 'Astro',           slug: 'astro' },
   { label: 'Tailwind',        slug: 'tailwindcss' },
