@@ -2,17 +2,17 @@ import { useEffect, useRef } from 'react'
 
 const SKILLS = [
   { label: 'Python',          slug: 'python' },
-  { label: 'C#',              slug: 'sharp' },
+  { label: 'C#',              slug: '', icon: 'https://img.icons8.com/ios-filled/100/1A1A1A/c-sharp-logo.png' },
   { label: 'JavaScript',      slug: 'javascript' },
   { label: 'TypeScript',      slug: 'typescript' },
-  { label: 'Shell',           slug: 'gnubash' },
+  { label: 'Shell',           slug: '', icon: 'https://img.icons8.com/ios-filled/100/1A1A1A/console.png' },
   { label: 'Unity',           slug: 'unity' },
   { label: 'PostgreSQL',      slug: 'postgresql' },
   { label: 'SQLite',          slug: 'sqlite' },
   { label: 'Docker',          slug: 'docker' },
   { label: 'Terraform',       slug: 'terraform' },
   { label: 'GitHub Actions',  slug: 'githubactions' },
-  { label: 'AWS',             slug: 'amazonwebservices' },
+  { label: 'AWS',             slug: '', icon: 'https://img.icons8.com/material-rounded/96/1A1A1A/amazon-web-services.png' },
   { label: 'Git',             slug: 'git' },
   { label: 'Astro',           slug: 'astro' },
   { label: 'Tailwind',        slug: 'tailwindcss' },
@@ -60,7 +60,7 @@ export default function SkillsInteractive() {
           style={{ transitionDelay: `${Math.min(i * 80, 400)}ms` }}
         >
           <img
-            src={`https://cdn.simpleicons.org/${skill.slug}/1c1917`}
+            src={skill.icon ?? `https://cdn.simpleicons.org/${skill.slug}/1c1917`}
             alt=""
             aria-hidden="true"
             width={14}

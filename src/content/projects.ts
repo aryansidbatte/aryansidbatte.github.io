@@ -7,6 +7,7 @@ export interface Project {
   github: string       // repo URL
   demo?: string        // live demo URL (optional — render conditionally)
   caseStudy?: string   // internal route (only Wayward Suns)
+  highlights?: string[] // bullet points shown in modal
   featured: boolean    // featured projects shown first
 }
 
@@ -29,6 +30,11 @@ export const projects: Project[] = [
     stack: ['Astro', 'Tailwind', 'TypeScript', 'React'],
     github: 'https://github.com/aryansidbatte/aryansidbatte.github.io',
     demo: 'https://aryansidbatte.github.io',
+    highlights: [
+      'Most of the page is static Astro — plain HTML, no JS unless you\'re on an interactive section. React only loads for the four islands that need it: cursor, nav drawer, project grid, skills. Lighthouse 97.',
+      'Custom cursor runs on a rAF loop with event delegation. Two document listeners cover the whole page; magnetic element rects are cached at mount and refreshed on resize so getBoundingClientRect never runs in the animation loop.',
+      'The cursor dot morphs to a pill to a labeled pill using a spring cubic-bezier (0.34, 1.56, 0.64, 1). It gates on (pointer: fine) at load, so touch devices never run it.',
+    ],
     featured: true,
   },
   {
@@ -48,6 +54,11 @@ export const projects: Project[] = [
     outcome: 'Built recipe CRUD, permission-based editing, and image uploads on a fullstack py4web/SQLite app.',
     stack: ['Python', 'py4web', 'JavaScript', 'SQLite'],
     github: 'https://github.com/aryansidbatte/recipe-sharing-platform',
+    highlights: [
+      'Auth is session-based through py4web\'s built-in Auth class — username login (not email), 1hr expiry, 3-password reuse block. JWT was stubbed in the codebase but never turned on.',
+      'Ingredients are normalized into a many-to-many junction table with quantity_per_serving. Total calories compute server-side and are read-only; the author field stamps from auth.user_id on insert, invisible to forms.',
+      'First run seeds the database from TheMealDB API, one request per letter of the alphabet. Any recipe that would exceed 2000 calories gets a random 600–850 value swapped in.',
+    ],
     featured: true,
   },
   {
@@ -57,6 +68,11 @@ export const projects: Project[] = [
     outcome: 'Implemented steering behaviors, A* pathfinding, and procedural NavMesh from level geometry.',
     stack: ['Unity', 'C#'],
     github: 'https://github.com/aryansidbatte/NavmeshGeneration',
+    highlights: [
+      'Wrote the convex decomposition myself: shoelace formula for winding, cross products to spot reflex corners, recursive polygon splits until every cell is convex.',
+      'A* navigates the polygon graph; waypoints land at shared wall midpoints instead of cell centers so paths hug the geometry. A bestG dict cuts stale frontier entries without a heap.',
+      'Steering: speed = clamp(dist, 0, max), rotation = angle × 2. Agents slow down near waypoints as a side effect of the distance formula, no deceleration curve required.',
+    ],
     featured: true,
   },
   {

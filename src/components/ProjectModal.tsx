@@ -107,6 +107,8 @@ export default function ProjectModal({ project, onClose }: Props) {
               ref={closeButtonRef}
               aria-label="Close"
               onClick={onClose}
+              data-cursor-scale
+              data-cursor-dismiss
               className="text-muted hover:text-primary transition-colors ml-4 text-xl leading-none"
             >
               ✕
@@ -129,9 +131,21 @@ export default function ProjectModal({ project, onClose }: Props) {
           <p className="text-secondary text-sm leading-relaxed mb-2">
             {project.description}
           </p>
-          <p className="text-secondary text-sm leading-relaxed mb-6">
+          <p className="text-secondary text-sm leading-relaxed mb-4">
             {project.outcome}
           </p>
+
+          {/* Highlights */}
+          {project.highlights && project.highlights.length > 0 && (
+            <ul className="mb-6 flex flex-col gap-2">
+              {project.highlights.map((item, i) => (
+                <li key={i} className="flex gap-2 text-secondary text-sm leading-relaxed">
+                  <span className="text-muted mt-0.5 shrink-0">–</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          )}
 
           {/* Links */}
           <div className="flex flex-wrap gap-3">
@@ -139,6 +153,7 @@ export default function ProjectModal({ project, onClose }: Props) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
+              data-cursor-label="Visit"
               className="text-sm text-secondary border border-border rounded-md px-4 py-2 hover:opacity-60 transition-opacity"
             >
               GitHub ↗
@@ -148,6 +163,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                 href={project.demo}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-cursor-label="Visit"
                 className="text-sm text-secondary border border-border rounded-md px-4 py-2 hover:opacity-60 transition-opacity"
               >
                 Live Demo ↗

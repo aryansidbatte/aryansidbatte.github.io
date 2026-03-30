@@ -99,9 +99,20 @@ export default function CustomCursor() {
       }
     }
 
+    // Reset cursor state when clicking elements that will be removed from DOM
+    // (e.g. modal close button — mouseout never fires if element disappears)
+    function onPointerDown(e: PointerEvent) {
+      if ((e.target as Element).closest('[data-cursor-dismiss]')) {
+        setIsScaled(false)
+        setIsHovered(false)
+        setLabel('')
+      }
+    }
+
     document.addEventListener('mousemove', onMouseMove)
     document.addEventListener('mouseover', onMouseOver)
     document.addEventListener('mouseout',  onMouseOut)
+    document.addEventListener('pointerdown', onPointerDown)
 
     return () => {
       document.documentElement.classList.remove('cursor-custom')
@@ -109,6 +120,7 @@ export default function CustomCursor() {
       document.removeEventListener('mousemove', onMouseMove)
       document.removeEventListener('mouseover', onMouseOver)
       document.removeEventListener('mouseout',  onMouseOut)
+      document.removeEventListener('pointerdown', onPointerDown)
       window.removeEventListener('resize', cacheMagneticRects)
       window.removeEventListener('scroll', cacheMagneticRects)
       document.querySelectorAll('[data-magnetic]').forEach(el => {
