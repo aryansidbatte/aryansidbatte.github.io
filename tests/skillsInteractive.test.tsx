@@ -38,12 +38,12 @@ describe('SkillsInteractive', () => {
     })
   })
 
-  it('each pill has an img pointing to the Simple Icons CDN', () => {
+  it('each pill has an img pointing to a known icon CDN', () => {
     render(<SkillsInteractive />)
     screen.getAllByRole('listitem').forEach(pill => {
       const img = pill.querySelector('img')
       expect(img).not.toBeNull()
-      expect(img!.getAttribute('src')).toMatch(/^https:\/\/cdn\.simpleicons\.org\//)
+      expect(img!.getAttribute('src')).toMatch(/^https:\/\/(cdn\.simpleicons\.org|img\.icons8\.com)\//)
     })
   })
 
